@@ -1,0 +1,37 @@
+.Header {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 7%;
+    padding-right: 7%;
+    height: 56px;
+    border-bottom: 1px solid rgba(46, 60, 64, 0.4);
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    
+    display: grid;
+    grid-template-columns: auto 200px auto;
+    align-content: center;
+}
+
+@media only screen and (min-width: 1396px) {
+  .Header {
+    padding-left: 0;
+    padding-right: 0;
+    display: grid;
+    grid-template-columns: 500px 200px 500px;
+    justify-content: center;
+  }
+}
+
+.gridMiddle {
+    grid-column: 2 / 3;
+    justify-self: center;
+}
+
+.gridLeft {
+    grid-column: 3 / 4;
+    justify-self: right;
+}
