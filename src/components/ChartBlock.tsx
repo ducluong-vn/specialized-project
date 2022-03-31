@@ -48,14 +48,20 @@ export default function (props: IState) {
 		<div className={styles.container}>
 			<p className={styles.title}>{props.title}</p>
 			<ChartBox data={props.data} />
-			<LeftStats
-				max={props.data.reduce(getMax, props.data[0].value)}
-				min={props.data.reduce(getMin, props.data[0].value)}
-				avg={
-					props.data.reduce(getSum, props.data[0].value) /
-					props.data.length
-				}
-			/>
+
+			{props.data.length > 0 && (
+				<LeftStats
+					max={props.data.reduce(getMax, props.data[0].value)}
+					min={props.data.reduce(getMin, props.data[0].value)}
+					avg={
+						Math.round(
+							(props.data.reduce(getSum, 0) /
+								props.data.length) *
+								100
+						) / 100
+					}
+				/>
+			)}
 		</div>
 	)
 }

@@ -9,11 +9,19 @@ interface ITimeItem {
     minute: number
 }
 
-export default function() {
+export default function(props: {
+    title: string,
+    feed_id: string,
+    feed_value: string
+}) {
     const [timeItems, setTimeItems] = useState<Array<ITimeItem>>([])
     
-    return <div>
-        {timeItems.map(item => (<p>{item.hour}</p>))}
-        <AddTime /> 
+    return <div className={styles.container}>
+        <p className={styles.title}>{props.title}</p>
+
+        <div>
+            {timeItems.map(item => (<p>{item.hour}</p>))}
+            <AddTime /> 
+        </div>
     </div>
 }

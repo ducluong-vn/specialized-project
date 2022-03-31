@@ -3,6 +3,7 @@ import styles from "./App.module.css"
 import ChartSection from "./components/ChartSection"
 import Header from "./components/Header"
 import ScheduleSection from "./components/ScheduleSection"
+import SwitchSection from "./components/SwitchSection"
 
 function App() {
 	return (
@@ -10,6 +11,7 @@ function App() {
 			<Header />
 
 			<div className={styles.body}>
+				<SwitchSection />	
 				<ScheduleSection />
 				<ChartSection />
 			</div>
