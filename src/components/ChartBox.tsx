@@ -10,7 +10,7 @@ import {
 } from "recharts"
 
 export default function ChartBox(props: {
-	data?: Array<{ name: string; value: number }>
+	data: Array<{ name: string; value: number }>
 }) {
 	return (
 	<ResponsiveContainer width="100%" height={300}>
