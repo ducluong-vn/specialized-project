@@ -11,7 +11,7 @@ export default function () {
 			</span>
 			<span className={styles.gridLeft}>
 				<a href="https://github.com/ducluong-vn/specialized-project">
-					<img src="./github.png" alt="github image" />
+					{/* <img src="./github.png" alt="github image" /> */}
 				</a>
 			</span>
 		</header>

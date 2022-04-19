@@ -1,13 +1,16 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit'
+import React from 'react'
+import ScheduleSection from '../../components/ScheduleSection'
 
-const initialState = [
-    {
-        id: 1,
-        hour: 10,
-        minute: 19
-    },
+const initialState = [{
+    // id: 1,
+    // hour: "xx",
+    // minute: "xx"
+}]
 
-]
+
+
+console.log(initialState)
 
 const feedingSlice = createSlice({
 
@@ -18,10 +21,10 @@ const feedingSlice = createSlice({
             reducer(state, action) {
                 state.push(action.payload)
             },
-            prepare(hour, minute) {
+            prepare(id, hour, minute) {
                 return {
                     payload: {
-                        id: nanoid(),
+                        id,
                         hour,
                         minute
                     }

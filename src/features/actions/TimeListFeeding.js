@@ -13,7 +13,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function TimeListFeeding({ title, feed_id, feed_value }) {
+const aioKey = "aio_mskY08VYDotQn3N2QNfQ4WwSG06m"
+const username = "adazeus"
+const feedIdToReceiveValue = "1859403"
+
+export default function TimeListFeeding() {
     const feedings = useSelector(selectAllFeeding)
     const dispatch = useDispatch()
     const [open, setOpen] = React.useState(false)
@@ -25,7 +29,7 @@ export default function TimeListFeeding({ title, feed_id, feed_value }) {
 
     const onSavePostClicked = () => {
         if (hour && minute) {
-            dispatch(feedingAdded(hour, minute))
+            addAction()
             setHour('')
             setMinute('')
             setOpen(false);
@@ -35,6 +39,7 @@ export default function TimeListFeeding({ title, feed_id, feed_value }) {
     const removeItem = (id) => {
         if (id) {
             dispatch(feedingRemoved(id))
+            deleteAction(id)
         }
     }
 
@@ -50,15 +55,111 @@ export default function TimeListFeeding({ title, feed_id, feed_value }) {
     const theme = {
         spacing: 8,
     }
+
+    //get all action
+    const getAllAction = () => {
+        var axios = require('axios');
+
+        var config = {
+            method: 'get',
+            url: `https://io.adafruit.com/api/v2/${username}/actions?x-aio-key=${aioKey}`,
+            headers: {}
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(response.data);
+                var datas = response.data
+                datas.map(data => {
+                    var sp = data.value.split(" ")
+                    var id = data.id
+                    var hour = sp[1]
+                    var minute = sp[0]
+                    dispatch(feedingAdded(id, hour, minute))
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
+    React.useEffect(() => {
+        getAllAction()
+    }, [])
+
+    //delete feed
+    const deleteAction = (feedId) => {
+        var axios = require('axios');
+        var qs = require('qs');
+        var data = qs.stringify({
+
+        });
+        var config = {
+            method: 'delete',
+            url: `https://io.adafruit.com/api/v2/${username}/actions/${feedId}?x-aio-key=${aioKey}`,
+            headers: {},
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
+    //add action
+    const addAction = () => {
+        var axios = require('axios');
+        var qs = require('qs');
+        var data = qs.stringify({
+            'action': 'feed',
+            'action_feed_id': `${feedIdToReceiveValue}`,
+            'action_value': '1',
+            'trigger_type': 'schedule',
+            'value': `${minute} ${hour} * * *`
+        });
+        var config = {
+            method: 'post',
+            url: `https://io.adafruit.com/api/v2/${username}/actions?x-aio-key=${aioKey}`,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
+                var data = response.data
+                var sp = data.value.split(" ")
+                var id = data.id
+                var hour = sp[1]
+                var minute = sp[0]
+                dispatch(feedingAdded(id, hour, minute))
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
     return <div className={styles.container}>
-        <p className={styles.title}>{title}</p>
+        <p className={styles.title}>Cho Ăn</p>
 
         <Grid container spacing={2}>
             {feedings.map(item => (<Grid item xs={12} key={item.id}>
-                {item.hour}:{item.minute}
-                <Button variant="outlined" color="error" onClick={() => { removeItem(item.id) }} sx={{ m: 1 }}>
-                    Xóa
-                </Button>
+                {item.hour ? `${item.hour}:${item.minute}` : null}
+
+                {item.hour ?
+                    <Button variant="outlined" color="error" onClick={() => { removeItem(item.id) }} sx={{ m: 1 }}>
+                        Xóa
+                    </Button>
+                    : null}
+
             </Grid>))}
         </Grid>
         <div>

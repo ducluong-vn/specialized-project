@@ -40,7 +40,7 @@ export default function TimeListcleaning({ title, feed_id, feed_value }) {
 
 
     const handleClickOpen = () => {
-        setOpen(true);
+        // setOpen(true);
     };
 
     const handleClose = () => {

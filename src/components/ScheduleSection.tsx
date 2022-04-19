@@ -17,7 +17,7 @@ export default function () {
 
 			<Grid container spacing={2}>
 				<Grid item xs={4}>
-					<TimeListFeeding title="Cho ăn" feed_id="1832730" feed_value="1" />
+					<TimeListFeeding />
 				</Grid>
 				<Grid item xs={4}>
 					<TimeListCleaning title="Dọn dẹp" feed_id="1832730" feed_value="1" />

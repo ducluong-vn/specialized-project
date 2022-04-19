@@ -5,6 +5,7 @@ import styles from "../css/ChartSection.module.css"
 
 import Paho from "paho-mqtt"
 import axios from "axios"
+import Singleton from '../singleton/Singleton'
 
 interface IData {
 	name: string;
@@ -12,48 +13,58 @@ interface IData {
 }
 
 export default function () {
+
+
 	const [tempData, setTempData] = useState<Array<IData>>([])
 	const [humidData, setHumidData] = useState<Array<IData>>([])
-	
+	let singleton = Singleton.getInstance();
+	let clientId = Date.now().toString()
+	singleton.setClientId(clientId)
+
 	useEffect(() => {
-		axios
-			.get(
-				"https://io.adafruit.com/api/v2/trantrieuphi/feeds/bbc-hum/data?limit=10",
-				{
-					headers: {
-						"x-aio-key": "aio_CIdO75vbLL2X0nzgWUpxqyxtN4dE",
-					},
-				}
-			)
-			.then((res) => {
-				if (res.data) {
+		let singleton = Singleton.getInstance();
 
-					const fetchedTemp = res.data.map(
-						(temp: {
-							created_at: string | number | Date
-							value: string
-						}) => {
-							const date = new Date(temp.created_at)
+		if (singleton) {
+			axios
+				.get(
+					`https://io.adafruit.com/api/v2/${singleton.getusername()}/feeds/${singleton.getfeedIdHum()}/data?limit=10`,
+					{
+						headers: {
+							"x-aio-key": singleton.getaioKey(),
+						},
+					}
+				)
+				.then((res) => {
+					if (res.data) {
 
-							return {
-								name: `${date.getHours()}:${date.getMinutes()}`,
-								value: Number(temp.value),
+						const fetchedTemp = res.data.map(
+							(temp: {
+								created_at: string | number | Date
+								value: string
+							}) => {
+								const date = new Date(temp.created_at)
+
+								return {
+									name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
+									value: Number(temp.value),
+								}
 							}
-						}
-					)
-					
-					setHumidData(fetchedTemp)
-				}
-			})
+						)
+
+						setHumidData(fetchedTemp.reverse())
+					}
+				})
+		}
+
 	}, [])
 
 	useEffect(() => {
 		axios
 			.get(
-				"https://io.adafruit.com/api/v2/trantrieuphi/feeds/bbc-temp/data?limit=10",
+				`https://io.adafruit.com/api/v2/${singleton.getusername()}/feeds/${singleton.getfeedIdTemp()}/data?limit=10`,
 				{
 					headers: {
-						"x-aio-key": "aio_CIdO75vbLL2X0nzgWUpxqyxtN4dE",
+						"x-aio-key": singleton.getaioKey(),
 					},
 				}
 			)
@@ -68,13 +79,12 @@ export default function () {
 							const date = new Date(temp.created_at)
 
 							return {
-								name: `${date.getHours()}:${date.getMinutes()}`,
+								name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
 								value: Number(temp.value),
 							}
 						}
 					)
-					
-					setTempData(fetchedTemp)
+					setTempData(fetchedTemp.reverse())
 				}
 			})
 	}, [])
@@ -82,10 +92,18 @@ export default function () {
 	const updateTempNewValue = (newValue: number) => {
 		const date = new Date()
 
+		if (newValue < 20) {
+			alert("Cảnh báo! Nhiệt độ quá thấp")
+		}
+
+		if (newValue > 40) {
+			alert("Cảnh báo! Nhiệt độ quá cao")
+		}
+
 		setTempData([
 			...tempData,
 			{
-				name: `${date.getHours()}:${date.getMinutes()}`,
+				name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
 				value: newValue,
 			},
 		])
@@ -94,22 +112,26 @@ export default function () {
 	const updateHumidNewValue = (newValue: number) => {
 		const date = new Date()
 
+		if (newValue < 30) {
+			alert("Cảnh báo! Độ ẩm quá thấp")
+		}
+
 		setHumidData([
 			...humidData,
 			{
-				name: `${date.getHours()}:${date.getMinutes()}`,
+				name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
 				value: newValue,
 			},
 		])
 	}
 
-	const AIO_FEED_IDS = ["bbc-temp", "bbc-hum"]
+	const AIO_FEED_IDS = [singleton.getfeedIdTemp(), singleton.getfeedIdHum()]
 
 	// Create a client instance
 	var client = new Paho.Client(
 		"io.adafruit.com",
 		Number(443),
-		"4b2fb0d367e9dc77bcd2d21cc3889090"
+		singleton.getclientId()
 	)
 
 	// set callback handlers
@@ -117,8 +139,8 @@ export default function () {
 	client.onMessageArrived = onMessageArrived
 	// connect the client
 	client.connect({
-		userName: "trantrieuphi",
-		password: "aio_CIdO75vbLL2X0nzgWUpxqyxtN4dE",
+		userName: singleton.getusername(),
+		password: singleton.getaioKey(),
 		onSuccess: onConnect,
 		useSSL: true,
 	})
@@ -128,7 +150,7 @@ export default function () {
 		// Once a connection has been made, make a subscription and send a message.
 		console.log("onConnect")
 		AIO_FEED_IDS.forEach((id) => {
-			client.subscribe("trantrieuphi/feeds/" + id, { onSuccess: onSubscribe })
+			client.subscribe(`${singleton.getusername()}/feeds/` + id, { onSuccess: onSubscribe })
 		})
 	}
 
@@ -147,9 +169,9 @@ export default function () {
 	function onMessageArrived(message: any) {
 		console.log("onMessageArrived:" + message.payloadString)
 		console.log("feed: " + message.destinationName)
-		if (message.destinationName === "trantrieuphi/feeds/bbc-temp") {
+		if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getfeedIdTemp()}`) {
 			updateTempNewValue(Number(message.payloadString))
-		} else if (message.destinationName === "trantrieuphi/feeds/bbc-hum") {
+		} else if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getfeedIdHum()}`) {
 			updateHumidNewValue(Number(message.payloadString))
 		}
 	}
