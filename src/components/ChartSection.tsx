@@ -18,8 +18,6 @@ export default function () {
 	const [tempData, setTempData] = useState<Array<IData>>([])
 	const [humidData, setHumidData] = useState<Array<IData>>([])
 	let singleton = Singleton.getInstance();
-	let clientId = Date.now().toString()
-	singleton.setClientId(clientId)
 
 	useEffect(() => {
 		let singleton = Singleton.getInstance();

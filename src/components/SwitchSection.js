@@ -9,8 +9,6 @@ export default function SwitchButton() {
     //adfruit identification
 
     let singleton = Singleton.getInstance();
-    let clientId = Date.now().toString()
-    singleton.setClientId(clientId)
 
     const AIO_FEED_IDS = [singleton.getfeedIdRelay()]
 

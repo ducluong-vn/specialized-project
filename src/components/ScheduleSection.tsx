@@ -9,8 +9,8 @@ import TimeListCleaning from "../features/actions/TimeListCleaning"
 import TimeListShower from "../features/actions/TimeListShower"
 import { Grid } from "@mui/material"
 
-
 export default function () {
+
 	return (
 		<div className={styles.container}>
 			<p className={styles.heading}>HẸN GIỜ</p>

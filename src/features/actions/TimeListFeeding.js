@@ -12,12 +12,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-
-const aioKey = "aio_mskY08VYDotQn3N2QNfQ4WwSG06m"
-const username = "adazeus"
-const feedIdToReceiveValue = "1859403"
+import Singleton from '../../singleton/Singleton'
 
 export default function TimeListFeeding() {
+
+    let singleton = Singleton.getInstance();
+
     const feedings = useSelector(selectAllFeeding)
     const dispatch = useDispatch()
     const [open, setOpen] = React.useState(false)
@@ -62,7 +62,7 @@ export default function TimeListFeeding() {
 
         var config = {
             method: 'get',
-            url: `https://io.adafruit.com/api/v2/${username}/actions?x-aio-key=${aioKey}`,
+            url: `https://io.adafruit.com/api/v2/${singleton.getusername()}/actions?x-aio-key=${singleton.getaioKey()}`,
             headers: {}
         };
 
@@ -97,7 +97,7 @@ export default function TimeListFeeding() {
         });
         var config = {
             method: 'delete',
-            url: `https://io.adafruit.com/api/v2/${username}/actions/${feedId}?x-aio-key=${aioKey}`,
+            url: `https://io.adafruit.com/api/v2/${singleton.getusername()}/actions/${feedId}?x-aio-key=${singleton.getaioKey()}`,
             headers: {},
             data: data
         };
@@ -118,14 +118,14 @@ export default function TimeListFeeding() {
         var qs = require('qs');
         var data = qs.stringify({
             'action': 'feed',
-            'action_feed_id': `${feedIdToReceiveValue}`,
+            'action_feed_id': `${singleton.getfeedIdRelay()}`,
             'action_value': '1',
             'trigger_type': 'schedule',
             'value': `${minute} ${hour} * * *`
         });
         var config = {
             method: 'post',
-            url: `https://io.adafruit.com/api/v2/${username}/actions?x-aio-key=${aioKey}`,
+            url: `https://io.adafruit.com/api/v2/${singleton.getusername()}/actions?x-aio-key=${singleton.getaioKey()}`,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
