@@ -10,7 +10,7 @@ export default function SwitchButton() {
 
     let singleton = Singleton.getInstance();
 
-    const AIO_FEED_IDS = [singleton.getfeedIdRelay()]
+    const AIO_FEED_IDS = [singleton.getFeedKeyRelay()]
 
     // Create a client instance
     var client = new Paho.Client(
@@ -54,7 +54,7 @@ export default function SwitchButton() {
     function onMessageArrived(message) {
         console.log("onMessageArrived:" + message.payloadString)
         console.log("feed: " + message.destinationName)
-        if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getfeedIdRelay()}`) {
+        if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`) {
             if (message.payloadString === "1") {
 
                 document.getElementById("feeding").innerHTML = "ĐANG CHO ĂN"
@@ -71,22 +71,20 @@ export default function SwitchButton() {
 
             }
         }
-        // else if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getfeedIdRelay()}`) {
-        // }
     }
 
 
 
     const handleFeeding = () => {
         var message = new Paho.Message("1");
-        message.destinationName = `${singleton.getusername()}/feeds/${singleton.getfeedIdRelay()}`;
+        message.destinationName = `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`;
         client.send(message);
 
     }
 
     const handleTurnOffFeeding = () => {
         var message = new Paho.Message("0");
-        message.destinationName = `${singleton.getusername()}/feeds/${singleton.getfeedIdRelay()}`;
+        message.destinationName = `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`;
         client.send(message);
     }
 

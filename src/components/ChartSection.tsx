@@ -43,7 +43,7 @@ export default function () {
 								const date = new Date(temp.created_at)
 
 								return {
-									name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
+									name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 									value: Number(temp.value),
 								}
 							}
@@ -77,7 +77,7 @@ export default function () {
 							const date = new Date(temp.created_at)
 
 							return {
-								name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
+								name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 								value: Number(temp.value),
 							}
 						}
@@ -90,18 +90,18 @@ export default function () {
 	const updateTempNewValue = (newValue: number) => {
 		const date = new Date()
 
-		if (newValue < 20) {
+		if (newValue < 1) {
 			alert("Cảnh báo! Nhiệt độ quá thấp")
 		}
 
-		if (newValue > 40) {
+		if (newValue > 50) {
 			alert("Cảnh báo! Nhiệt độ quá cao")
 		}
 
 		setTempData([
 			...tempData,
 			{
-				name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
+				name: `${date.getDate()} -${date.getMonth()} /${date.getHours()}:${date.getMinutes()}`,
 				value: newValue,
 			},
 		])
@@ -110,7 +110,7 @@ export default function () {
 	const updateHumidNewValue = (newValue: number) => {
 		const date = new Date()
 
-		if (newValue < 30) {
+		if (newValue < -1) {
 			alert("Cảnh báo! Độ ẩm quá thấp")
 		}
 

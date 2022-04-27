@@ -8,19 +8,21 @@ export default class Singleton {
     feedIdRelay: string;
     feedIdHum: string;
     feedIdTemp: string;
+    feedKeyRelay: string;
     clientId: string;
     _userID: any;
 
     constructor() {
-        this.aioKey = "aio_CDeZ99p9tEqXh5QOrjxl6bEjK2yD"
-        this.username = "adazeus"
-        this.feedIdRelay = "1865787" // chọn Feed Info -> chọn Show detailed feed JSON record
+        this.aioKey = "aio_ZqzP364N6G4TiWgEdxSOWntud1ao"
+        this.username = "thanhvodev"
+        this.feedIdRelay = "1939387" // chọn Feed Info -> chọn Show detailed feed JSON record
         this.feedIdHum = "bbc-hum"
         this.feedIdTemp = "bbc-tem"
+        this.feedKeyRelay = "bbc-relay"
         this.clientId = "xl6bEZ99p9tEqXh5QOrjxl"
     }
     static getInstance() {
-        if (Singleton.flag == false) {
+        if (Singleton.flag === false) {
             Singleton.myInstance = new Singleton();
             Singleton.flag = true;
         }
@@ -31,6 +33,10 @@ export default class Singleton {
 
     getUserID() {
         return this._userID;
+    }
+
+    getFeedKeyRelay() {
+        return this.feedKeyRelay;
     }
 
     getaioKey(): string {
