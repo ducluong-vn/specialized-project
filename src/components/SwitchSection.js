@@ -103,12 +103,12 @@ export default function SwitchButton() {
                 <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
             </Grid>
             <Grid item xs={3}>
-                <Button variant="outlined">DỌN DẸP</Button>
-                <Button variant="outlined" color="error">Dừng</Button>
+                <Button variant="outlined" onClick={handleFeeding}>DỌN DẸP</Button>
+                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
             </Grid>
             <Grid item xs={3}>
-                <Button variant="outlined">TẮM</Button>
-                <Button variant="outlined" color="error">Dừng</Button>
+                <Button variant="outlined" onClick={handleFeeding}>TẮM</Button>
+                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
             </Grid>
         </Grid>
     </div>
