@@ -54,23 +54,22 @@ export default function SwitchButton() {
     function onMessageArrived(message) {
         console.log("onMessageArrived:" + message.payloadString)
         console.log("feed: " + message.destinationName)
-        if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`) {
-            if (message.payloadString === "1") {
+        // if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`) {
+        //     if (message.payloadString === "1") {
 
-                document.getElementById("feeding").innerHTML = "ĐANG CHO ĂN"
-                document.getElementById("feeding").style.color = "#b4b8bf"
-                document.getElementById("feeding").style.border = "1px solid #b4b8bf"
+        //         document.getElementById("feeding").innerHTML = "ĐANG CHO ĂN"
+        //         document.getElementById("feeding").style.color = "#b4b8bf"
+        //         document.getElementById("feeding").style.border = "1px solid #b4b8bf"
 
-                setTimeout(() => {
-                    handleTurnOffFeeding()
-                }, [5000])
-            } else {
-                document.getElementById("feeding").innerHTML = "CHO ĂN"
-                document.getElementById("feeding").style.color = "#1976d8"
-                document.getElementById("feeding").style.border = "1px solid #1976d8"
-
-            }
-        }
+        //         setTimeout(() => {
+        //             handleTurnOffFeeding()
+        //         }, [5000])
+        //     } else {
+        //         document.getElementById("feeding").innerHTML = "CHO ĂN"
+        //         document.getElementById("feeding").style.color = "#1976d8"
+        //         document.getElementById("feeding").style.border = "1px solid #1976d8"
+        //     }
+        // }
     }
 
 
@@ -100,13 +99,16 @@ export default function SwitchButton() {
         <p className={styles.heading}>CÔNG TẮC</p>
         <Grid container spacing={2}>
             <Grid item xs={3}>
-                <Button variant="outlined" onClick={handleFeeding} id="feeding">CHO ĂN</Button>
+                <Button variant="outlined" onClick={handleFeeding}>Dừng</Button>
+                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
             </Grid>
             <Grid item xs={3}>
                 <Button variant="outlined">DỌN DẸP</Button>
+                <Button variant="outlined" color="error">Dừng</Button>
             </Grid>
             <Grid item xs={3}>
                 <Button variant="outlined">TẮM</Button>
+                <Button variant="outlined" color="error">Dừng</Button>
             </Grid>
         </Grid>
     </div>

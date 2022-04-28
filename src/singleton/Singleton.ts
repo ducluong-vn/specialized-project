@@ -13,7 +13,7 @@ export default class Singleton {
     _userID: any;
 
     constructor() {
-        this.aioKey = "aio_ZqzP364N6G4TiWgEdxSOWntud1ao"
+        this.aioKey = "aio_SdwQ144LHwM2lZFyxUp50W4hu86d"
         this.username = "thanhvodev"
         this.feedIdRelay = "1939387" // chọn Feed Info -> chọn Show detailed feed JSON record
         this.feedIdHum = "bbc-hum"
