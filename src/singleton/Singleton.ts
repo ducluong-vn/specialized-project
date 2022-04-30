@@ -9,17 +9,15 @@ export default class Singleton {
     feedIdHum: string;
     feedIdTemp: string;
     feedKeyRelay: string;
-    clientId: string;
     _userID: any;
 
     constructor() {
-        this.aioKey = "aio_SdwQ144LHwM2lZFyxUp50W4hu86d"
+        this.aioKey = "aio_JBmI65a837B6dy8D4Et6XBshU6B9"
         this.username = "thanhvodev"
         this.feedIdRelay = "1939387" // chọn Feed Info -> chọn Show detailed feed JSON record
         this.feedIdHum = "bbc-hum"
         this.feedIdTemp = "bbc-tem"
         this.feedKeyRelay = "bbc-relay"
-        this.clientId = "xl6bEZ99p9tEqXh5QOrjxl"
     }
     static getInstance() {
         if (Singleton.flag === false) {
@@ -59,12 +57,12 @@ export default class Singleton {
         return this.feedIdTemp;
     }
 
-    getclientId() {
-        return this.clientId;
+    getMaxTempBetween(time1: any, time2: any) {
+
     }
 
-    setClientId(id: string) {
-        this.clientId = id;
+    getMaxHumidBetween(time1: any, time2: any) {
+
     }
 
 }

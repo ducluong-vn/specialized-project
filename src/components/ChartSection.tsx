@@ -129,7 +129,7 @@ export default function () {
 	var client = new Paho.Client(
 		"io.adafruit.com",
 		Number(443),
-		singleton.getclientId()
+		"b"
 	)
 
 	// set callback handlers

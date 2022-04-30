@@ -9,6 +9,30 @@ export default function SwitchButton() {
     //adfruit identification
 
     let singleton = Singleton.getInstance();
+    const [on, setOn] = React.useState()
+
+    React.useEffect(() => {
+        let singleton = Singleton.getInstance();
+
+        if (singleton) {
+            axios
+                .get(
+                    `https://io.adafruit.com/api/v2/${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}/data?limit=1`,
+                    {
+                        headers: {
+                            "x-aio-key": singleton.getaioKey(),
+                        },
+                    }
+                )
+                .then((res) => {
+                    if (res.data) {
+                        console.log(res.data)
+                        setOn(res.data[0].value === "1")
+                    }
+                })
+        }
+
+    }, [])
 
     const AIO_FEED_IDS = [singleton.getFeedKeyRelay()]
 
@@ -16,7 +40,7 @@ export default function SwitchButton() {
     var client = new Paho.Client(
         "io.adafruit.com",
         Number(443),
-        singleton.getclientId()
+        "a"
     )
 
     // set callback handlers
@@ -54,22 +78,13 @@ export default function SwitchButton() {
     function onMessageArrived(message) {
         console.log("onMessageArrived:" + message.payloadString)
         console.log("feed: " + message.destinationName)
-        // if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`) {
-        //     if (message.payloadString === "1") {
-
-        //         document.getElementById("feeding").innerHTML = "ĐANG CHO ĂN"
-        //         document.getElementById("feeding").style.color = "#b4b8bf"
-        //         document.getElementById("feeding").style.border = "1px solid #b4b8bf"
-
-        //         setTimeout(() => {
-        //             handleTurnOffFeeding()
-        //         }, [5000])
-        //     } else {
-        //         document.getElementById("feeding").innerHTML = "CHO ĂN"
-        //         document.getElementById("feeding").style.color = "#1976d8"
-        //         document.getElementById("feeding").style.border = "1px solid #1976d8"
-        //     }
-        // }
+        if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`) {
+            if (message.payloadString === "1") {
+                setOn(true)
+            } else {
+                setOn(false)
+            }
+        }
     }
 
 
@@ -99,16 +114,17 @@ export default function SwitchButton() {
         <p className={styles.heading}>CÔNG TẮC</p>
         <Grid container spacing={2}>
             <Grid item xs={3}>
-                <Button variant="outlined" onClick={handleFeeding}>Dừng</Button>
-                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
+                <Button variant="outlined" onClick={handleFeeding} disabled={on}>CHO ĂN</Button>
+                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding} disabled={!on}>Dừng</Button>
+                <p>Máy bơm hiện tại đang:<h3>{on ? "ON" : "OFF"}</h3></p>
             </Grid>
             <Grid item xs={3}>
-                <Button variant="outlined" onClick={handleFeeding}>DỌN DẸP</Button>
-                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
+                <Button variant="outlined" onClick={handleFeeding} disabled={on}>DỌN DẸP</Button>
+                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding} disabled={!on}>Dừng</Button>
             </Grid>
             <Grid item xs={3}>
-                <Button variant="outlined" onClick={handleFeeding}>TẮM</Button>
-                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding}>Dừng</Button>
+                <Button variant="outlined" onClick={handleFeeding} disabled={on}>TẮM</Button>
+                <Button variant="outlined" color="error" onClick={handleTurnOffFeeding} disabled={!on}>Dừng</Button>
             </Grid>
         </Grid>
     </div>
