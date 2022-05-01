@@ -11,12 +11,12 @@ export default class Singleton {
     feedKeyRelay: string;
 
     constructor() {
-        this.aioKey = "aio_sULz62rQiJGPum0Oqa6GoVUGHneB"
-        this.username = "thanhvodev"
-        this.feedIdRelay = "1939387"
-        this.feedKeyHum = "bbc-hum"
-        this.feedKeyTemp = "bbc-tem"
-        this.feedKeyRelay = "bbc-relay"
+        this.aioKey = "aio_sULz62rQiJGPum0Oqa6GoVUGHneB" //Nhấn 'My Key' trên trang chính của io.adafruit.com, copy trường Active Key
+        this.username = "thanhvodev" //Nhấn 'My Key' trên trang chính của io.adafruit.com, copy trường Username
+        this.feedIdRelay = "1939387" //Id của Feed Relay, chọn Feed Relay -> Chọn Feed Info -> Chọn Show detailed feed JSON record -> copy trường id
+        this.feedKeyHum = "bbc-hum" // Key của feed lưu độ ẩm - có thể xem tại Feed Info hoặc nằm bên cạnh cột Feed Name trên trang 'view all feed'
+        this.feedKeyTemp = "bbc-tem" // Key của feed lưu nhiệt độ
+        this.feedKeyRelay = "bbc-relay" // Key của feed Relay
     }
     static getInstance() {
         if (Singleton.flag === false) {
