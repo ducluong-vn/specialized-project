@@ -25,10 +25,10 @@ export default function () {
 		if (singleton) {
 			axios
 				.get(
-					`https://io.adafruit.com/api/v2/${singleton.getusername()}/feeds/${singleton.getfeedIdHum()}/data?limit=10`,
+					`https://io.adafruit.com/api/v2/${singleton.getUsername()}/feeds/${singleton.getFeedKeyHum()}/data?limit=10`,
 					{
 						headers: {
-							"x-aio-key": singleton.getaioKey(),
+							"x-aio-key": singleton.getAioKey(),
 						},
 					}
 				)
@@ -59,10 +59,10 @@ export default function () {
 	useEffect(() => {
 		axios
 			.get(
-				`https://io.adafruit.com/api/v2/${singleton.getusername()}/feeds/${singleton.getfeedIdTemp()}/data?limit=10`,
+				`https://io.adafruit.com/api/v2/${singleton.getUsername()}/feeds/${singleton.getFeedKeyTemp()}/data?limit=10`,
 				{
 					headers: {
-						"x-aio-key": singleton.getaioKey(),
+						"x-aio-key": singleton.getAioKey(),
 					},
 				}
 			)
@@ -90,11 +90,11 @@ export default function () {
 	const updateTempNewValue = (newValue: number) => {
 		const date = new Date()
 
-		if (newValue < 1) {
+		if (newValue < 10) {
 			alert("Cảnh báo! Nhiệt độ quá thấp")
 		}
 
-		if (newValue > 50) {
+		if (newValue > 27) {
 			alert("Cảnh báo! Nhiệt độ quá cao")
 		}
 
@@ -110,7 +110,7 @@ export default function () {
 	const updateHumidNewValue = (newValue: number) => {
 		const date = new Date()
 
-		if (newValue < -1) {
+		if (newValue < 5) {
 			alert("Cảnh báo! Độ ẩm quá thấp")
 		}
 
@@ -123,7 +123,7 @@ export default function () {
 		])
 	}
 
-	const AIO_FEED_IDS = [singleton.getfeedIdTemp(), singleton.getfeedIdHum()]
+	const AIO_FEED_IDS = [singleton.getFeedKeyTemp(), singleton.getFeedKeyHum()]
 
 	// Create a client instance
 	var client = new Paho.Client(
@@ -137,8 +137,8 @@ export default function () {
 	client.onMessageArrived = onMessageArrived
 	// connect the client
 	client.connect({
-		userName: singleton.getusername(),
-		password: singleton.getaioKey(),
+		userName: singleton.getUsername(),
+		password: singleton.getAioKey(),
 		onSuccess: onConnect,
 		useSSL: true,
 	})
@@ -148,7 +148,7 @@ export default function () {
 		// Once a connection has been made, make a subscription and send a message.
 		console.log("onConnect")
 		AIO_FEED_IDS.forEach((id) => {
-			client.subscribe(`${singleton.getusername()}/feeds/` + id, { onSuccess: onSubscribe })
+			client.subscribe(`${singleton.getUsername()}/feeds/` + id, { onSuccess: onSubscribe })
 		})
 	}
 
@@ -167,9 +167,9 @@ export default function () {
 	function onMessageArrived(message: any) {
 		console.log("onMessageArrived:" + message.payloadString)
 		console.log("feed: " + message.destinationName)
-		if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getfeedIdTemp()}`) {
+		if (message.destinationName === `${singleton.getUsername()}/feeds/${singleton.getFeedKeyTemp()}`) {
 			updateTempNewValue(Number(message.payloadString))
-		} else if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getfeedIdHum()}`) {
+		} else if (message.destinationName === `${singleton.getUsername()}/feeds/${singleton.getFeedKeyHum()}`) {
 			updateHumidNewValue(Number(message.payloadString))
 		}
 	}

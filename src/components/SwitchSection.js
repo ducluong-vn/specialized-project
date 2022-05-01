@@ -17,10 +17,10 @@ export default function SwitchButton() {
         if (singleton) {
             axios
                 .get(
-                    `https://io.adafruit.com/api/v2/${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}/data?limit=1`,
+                    `https://io.adafruit.com/api/v2/${singleton.getUsername()}/feeds/${singleton.getFeedKeyRelay()}/data?limit=1`,
                     {
                         headers: {
-                            "x-aio-key": singleton.getaioKey(),
+                            "x-aio-key": singleton.getAioKey(),
                         },
                     }
                 )
@@ -48,8 +48,8 @@ export default function SwitchButton() {
     client.onMessageArrived = onMessageArrived
     // connect the client
     client.connect({
-        userName: singleton.getusername(),
-        password: singleton.getaioKey(),
+        userName: singleton.getUsername(),
+        password: singleton.getAioKey(),
         onSuccess: onConnect,
         useSSL: true,
     })
@@ -59,7 +59,7 @@ export default function SwitchButton() {
         // Once a connection has been made, make a subscription and send a message.
         console.log("onConnect")
         AIO_FEED_IDS.forEach((id) => {
-            client.subscribe(`${singleton.getusername()}/feeds/` + id, { onSuccess: onSubscribe })
+            client.subscribe(`${singleton.getUsername()}/feeds/` + id, { onSuccess: onSubscribe })
         })
     }
 
@@ -78,7 +78,7 @@ export default function SwitchButton() {
     function onMessageArrived(message) {
         console.log("onMessageArrived:" + message.payloadString)
         console.log("feed: " + message.destinationName)
-        if (message.destinationName === `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`) {
+        if (message.destinationName === `${singleton.getUsername()}/feeds/${singleton.getFeedKeyRelay()}`) {
             if (message.payloadString === "1") {
                 setOn(true)
             } else {
@@ -91,14 +91,14 @@ export default function SwitchButton() {
 
     const handleFeeding = () => {
         var message = new Paho.Message("1");
-        message.destinationName = `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`;
+        message.destinationName = `${singleton.getUsername()}/feeds/${singleton.getFeedKeyRelay()}`;
         client.send(message);
 
     }
 
     const handleTurnOffFeeding = () => {
         var message = new Paho.Message("0");
-        message.destinationName = `${singleton.getusername()}/feeds/${singleton.getFeedKeyRelay()}`;
+        message.destinationName = `${singleton.getUsername()}/feeds/${singleton.getFeedKeyRelay()}`;
         client.send(message);
     }
 
@@ -121,10 +121,12 @@ export default function SwitchButton() {
             <Grid item xs={3}>
                 <Button variant="outlined" onClick={handleFeeding} disabled={on}>DỌN DẸP</Button>
                 <Button variant="outlined" color="error" onClick={handleTurnOffFeeding} disabled={!on}>Dừng</Button>
+                <p>Máy bơm hiện tại đang:<h3>{on ? "ON" : "OFF"}</h3></p>
             </Grid>
             <Grid item xs={3}>
                 <Button variant="outlined" onClick={handleFeeding} disabled={on}>TẮM</Button>
                 <Button variant="outlined" color="error" onClick={handleTurnOffFeeding} disabled={!on}>Dừng</Button>
+                <p>Máy bơm hiện tại đang:<h3>{on ? "ON" : "OFF"}</h3></p>
             </Grid>
         </Grid>
     </div>

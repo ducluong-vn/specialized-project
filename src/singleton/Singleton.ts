@@ -6,17 +6,16 @@ export default class Singleton {
     username: any;
     aioKey: string;
     feedIdRelay: string;
-    feedIdHum: string;
-    feedIdTemp: string;
+    feedKeyHum: string;
+    feedKeyTemp: string;
     feedKeyRelay: string;
-    _userID: any;
 
     constructor() {
-        this.aioKey = "aio_JBmI65a837B6dy8D4Et6XBshU6B9"
+        this.aioKey = "aio_sULz62rQiJGPum0Oqa6GoVUGHneB"
         this.username = "thanhvodev"
-        this.feedIdRelay = "1939387" // chọn Feed Info -> chọn Show detailed feed JSON record
-        this.feedIdHum = "bbc-hum"
-        this.feedIdTemp = "bbc-tem"
+        this.feedIdRelay = "1939387"
+        this.feedKeyHum = "bbc-hum"
+        this.feedKeyTemp = "bbc-tem"
         this.feedKeyRelay = "bbc-relay"
     }
     static getInstance() {
@@ -29,33 +28,55 @@ export default class Singleton {
         return this.myInstance;
     }
 
-    getUserID() {
-        return this._userID;
-    }
 
     getFeedKeyRelay() {
         return this.feedKeyRelay;
     }
 
-    getaioKey(): string {
+    setFeedKeyRelay(feedKeyRelay: string) {
+        this.feedKeyRelay = feedKeyRelay;
+    }
+
+    getAioKey(): string {
         return this.aioKey;
     }
 
-    getfeedIdRelay(): string {
+    setAioKey(aioKey: string) {
+        this.aioKey = aioKey;
+    }
+
+    getFeedIdRelay(): string {
         return this.feedIdRelay;
     }
 
-    getusername() {
+    setFeedIdRelay(feedIdRelay: string) {
+        this.feedIdRelay = feedIdRelay;
+    }
+
+    getUsername() {
         return this.username;
     }
 
-    getfeedIdHum() {
-        return this.feedIdHum;
+    setUsername(username: string) {
+        this.username = username;
     }
 
-    getfeedIdTemp() {
-        return this.feedIdTemp;
+    getFeedKeyHum() {
+        return this.feedKeyHum;
     }
+
+    setFeedKeyHum(feedKeyHum: string) {
+        this.feedKeyHum = feedKeyHum;
+    }
+
+    getFeedKeyTemp() {
+        return this.feedKeyTemp;
+    }
+
+    setFeedKeyTemp(feedKeyTemp: string) {
+        this.feedKeyTemp = feedKeyTemp;
+    }
+
 
     getMaxTempBetween(time1: any, time2: any) {
 

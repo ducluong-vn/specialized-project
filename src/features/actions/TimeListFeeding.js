@@ -40,6 +40,7 @@ export default function TimeListFeeding() {
         if (id) {
             dispatch(feedingRemoved(id))
             deleteAction(id)
+            deleteAction(Number(id) + 1)
         }
     }
 
@@ -62,7 +63,7 @@ export default function TimeListFeeding() {
 
         var config = {
             method: 'get',
-            url: `https://io.adafruit.com/api/v2/${singleton.getusername()}/actions?x-aio-key=${singleton.getaioKey()}`,
+            url: `https://io.adafruit.com/api/v2/${singleton.getUsername()}/actions?x-aio-key=${singleton.getAioKey()}`,
             headers: {}
         };
 
@@ -75,7 +76,9 @@ export default function TimeListFeeding() {
                     var id = data.id
                     var hour = sp[1]
                     var minute = sp[0]
-                    dispatch(feedingAdded(id, hour, minute))
+                    if (data.action_value == "1") {
+                        dispatch(feedingAdded(id, hour, minute))
+                    }
                 })
             })
             .catch(function (error) {
@@ -97,7 +100,7 @@ export default function TimeListFeeding() {
         });
         var config = {
             method: 'delete',
-            url: `https://io.adafruit.com/api/v2/${singleton.getusername()}/actions/${feedId}?x-aio-key=${singleton.getaioKey()}`,
+            url: `https://io.adafruit.com/api/v2/${singleton.getUsername()}/actions/${feedId}?x-aio-key=${singleton.getAioKey()}`,
             headers: {},
             data: data
         };
@@ -118,14 +121,14 @@ export default function TimeListFeeding() {
         var qs = require('qs');
         var data = qs.stringify({
             'action': 'feed',
-            'action_feed_id': `${singleton.getfeedIdRelay()}`,
+            'action_feed_id': `${singleton.getFeedIdRelay()}`,
             'action_value': '1',
             'trigger_type': 'schedule',
             'value': `${minute} ${hour} * * *`
         });
         var config = {
             method: 'post',
-            url: `https://io.adafruit.com/api/v2/${singleton.getusername()}/actions?x-aio-key=${singleton.getaioKey()}`,
+            url: `https://io.adafruit.com/api/v2/${singleton.getUsername()}/actions?x-aio-key=${singleton.getAioKey()}`,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -140,6 +143,36 @@ export default function TimeListFeeding() {
                 var hour = sp[1]
                 var minute = sp[0]
                 dispatch(feedingAdded(id, hour, minute))
+                addTurnOffAction(Number(minute) + 1, hour)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
+    //add "0" action
+    const addTurnOffAction = (minute, hour) => {
+        var axios = require('axios');
+        var qs = require('qs');
+        var data = qs.stringify({
+            'action': 'feed',
+            'action_feed_id': `${singleton.getFeedIdRelay()}`,
+            'action_value': '0',
+            'trigger_type': 'schedule',
+            'value': `${minute} ${hour} * * *`
+        });
+        var config = {
+            method: 'post',
+            url: `https://io.adafruit.com/api/v2/${singleton.getUsername()}/actions?x-aio-key=${singleton.getAioKey()}`,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: data
+        };
+
+        axios(config)
+            .then(function (response) {
             })
             .catch(function (error) {
                 console.log(error);
