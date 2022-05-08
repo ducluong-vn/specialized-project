@@ -43,7 +43,7 @@ export default function () {
 								const date = new Date(temp.created_at)
 
 								return {
-									name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+									name: `${date.getDate()}-${date.getMonth() + 1}/${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 									value: Number(temp.value),
 								}
 							}
@@ -77,7 +77,7 @@ export default function () {
 							const date = new Date(temp.created_at)
 
 							return {
-								name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+								name: `${date.getDate()}-${date.getMonth() + 1}/${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 								value: Number(temp.value),
 							}
 						}
@@ -101,7 +101,7 @@ export default function () {
 		setTempData([
 			...tempData,
 			{
-				name: `${date.getDate()} -${date.getMonth()} /${date.getHours()}:${date.getMinutes()}`,
+				name: `${date.getDate()} -${date.getMonth() + 1} /${date.getHours()}:${date.getMinutes()}`,
 				value: newValue,
 			},
 		])
@@ -117,7 +117,7 @@ export default function () {
 		setHumidData([
 			...humidData,
 			{
-				name: `${date.getDate()}-${date.getMonth()}/${date.getHours()}:${date.getMinutes()}`,
+				name: `${date.getDate()}-${date.getMonth() + 1}/${date.getHours()}:${date.getMinutes()}`,
 				value: newValue,
 			},
 		])
